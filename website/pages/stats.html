@@ -1,54 +1,121 @@
 <style>
-
-    #topCharts{
+    #topCharts {
         padding: 18px;
     }
 
-    #topCharts > div > div > svg{
+    #topCharts>div>div>svg {
         display: block;
         height: 280px;
     }
 
-    .chartWrapper{
+    .chartWrapper {
         border: solid 1px #c7c7c7;
         border-radius: 5px;
         padding: 5px;
         margin-bottom: 18px;
     }
 
-    .chartLabel{
+    .chartLabel {
         font-size: 1.2em;
         text-align: center;
         padding: 4px;
     }
 
-    .chartHolder{
-
-    }
-
+    .chartHolder {}
 </style>
 
-<div id="topCharts">
-
-    <div class="chartWrapper">
-        <div class="chartLabel">Workers Per Pool</div>
-        <div class="chartHolder"><svg id="poolWorkers"/></div>
+<div class="main-panel">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+        <div class="container-fluid">
+            <div class="navbar-wrapper">
+                <span class="navbar-brand">Global Pool Statistics</span>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+    <!-- Start Content -->
+    <div class="content">
+        <div class="row">
+            <div class="col-md">
+                <div class="row">
+                    <div class="col-md">
+                        <div class="card bg-primary">
+                            <div class="card-header card-chart card-header-mono">
+                                <canvas id="pool-chart-global" height="256"></canvas>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title text-light">Pool Worker Distribution</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="card bg-rose-iso">
+                            <div class="card-header card-chart card-header-mono">
+                                <canvas id="dist-hash-chart-global" height="256"></canvas>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title text-light">Pool Hashrate Distribution</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <h4 class="card-title">Top 5 Pools</h4>
+                        <p class="card-category">Determined by number of active miners</p>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-info">
+                                <tr>
+                                    <th>Coin</th>
+                                    <th>Algorithm</th>
+                                    <th>Workers</th>
+                                    <th>Hashrate</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-worker-body">
+                                    {{ var pools = Object.keys(it.stats.pools).map(function(key) { return it.stats.pools[key]; }); }}
+                                    {{ pools.sort(function(a, b) { return a.workerCount - b.workerCount; }); }}
+                                    {{ pools = pools.splice(0, 5); }}
+                                    {{ for(var pool in pools) { }}
+                                    <tr>
+                                        <td>{{=pools[pool].name}}</td>
+                                        <td>{{=pools[pool].algorithm}}</td>
+                                        <td>{{=pools[pool].workerCount}}</td>
+                                        <td>{{=pools[pool].hashrateString}}</td>
+                                    </tr>
+                                    {{ } }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg">
+                <div class="card bg-success">
+                    <div class="card-header card-chart card-header-mono">
+                        <canvas id="worker-chart-global" height="50"></canvas>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title text-light">Total Workers</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="chartWrapper">
-        <div class="chartLabel">Hashrate Per Pool</div>
-        <div class="chartHolder"><svg id="poolHashrate"/></div>
-    </div>
-
-    <div class="chartWrapper">
-        <div class="chartLabel">Blocks Pending Per Pool</div>
-        <div class="chartHolder"><svg id="poolBlocks"/></div>
-    </div>
-
 </div>
 
 
-
+<script src="../static/moment-with-locales.js"></script>
+<script src="../static/sma.js"></script>
+<script src="../static/ema.js"></script>
+<script src="../static/random-color.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <script>
     document.querySelector('main').appendChild(document.createElement('script')).src = '/static/stats.js';
 </script>

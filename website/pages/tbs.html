@@ -32,7 +32,7 @@
 
 </style>
 
-<table class="pure-table">
+<table class="ui celled table" id="stats-tables">
     <thead>
     <tr>
         <th>Pool</th>
@@ -48,7 +48,8 @@
     </tr>
     </thead>
     {{ for(var pool in it.stats.pools) { }}
-    <tr class="pure-table-odd">
+    <tr>
+    <!--
         <td>{{=it.stats.pools[pool].name}}</td>
         <td>{{=it.stats.pools[pool].algorithm}}</td>
         <td>{{=Object.keys(it.stats.pools[pool].workers).length}}</td>
@@ -59,6 +60,42 @@
         <td>{{=it.stats.pools[pool].blocks.confirmed}}</td>
         <td>{{=it.stats.pools[pool].blocks.orphaned}}</td>
         <td>{{=it.stats.pools[pool].hashrateString}}</td>
+    -->
     </tr>
     {{ } }}
 </table>
+
+<script>
+    var pools = JSON.parse('{{=JSON.stringify(it.stats.pools)}}');
+    var data = [];
+    for(var p in pools) {
+        var pool = pools[p];
+        data.push({
+            name: pool.name,
+            algorithm: pool.algorithm,
+            workers: Object.keys(pool.workers).length,
+            validShares: pool.poolStats.validShares,
+            invalidShares: pool.poolStats.invalidShares,
+            validBlocks: pool.poolStats.validBlocks,
+            pending: pool.blocks.pending,
+            confirmed: pool.blocks.confirmed,
+            orphaned: pool.blocks.orphaned,
+            hashrateString: pool.hashrateString,
+        });
+    }
+    $('#stats-tables').DataTable( {
+        data: data,
+        columns: [
+            { data: 'name' },
+            { data: 'algorithm' },
+            { data: 'workers' },
+            { data: 'validShares' },
+            { data: 'invalidShares' },
+            { data: 'validBlocks' },
+            { data: 'pending' },
+            { data: 'confirmed' },
+            { data: 'orphaned' },
+            { data: 'hashrateString' }
+        ]
+    });
+</script>

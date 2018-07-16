@@ -16,7 +16,6 @@ var util = require('stratum-pool/lib/util.js');
 
 var api = require('./api.js');
 
-
 module.exports = function(logger){
 
     dot.templateSettings.strip = false;
@@ -40,6 +39,7 @@ module.exports = function(logger){
         'tbs.html': 'tbs',
         'workers.html': 'workers',
         'api.html': 'api',
+        'wallet.html' : 'wallet',
         'admin.html': 'admin',
         'mining_key.html': 'mining_key'
     };
@@ -104,6 +104,20 @@ module.exports = function(logger){
         }
     });
 
+    var minerpage = function(req, res, next){
+        var address = req.params.address || null;
+        if (address != null) {
+			address = address.split(".")[0];
+            portalStats.getBalanceByAddress(address, function(){
+                processTemplates();
+		        res.header('Content-Type', 'text/html');
+                res.end(indexesProcessed['wallet']);
+            });
+        } else {
+            next();
+        }
+    };
+
     portalStats.getGlobalStats(function(){
         readPageFiles(Object.keys(pageFiles));
     });
@@ -127,7 +141,8 @@ module.exports = function(logger){
     var buildKeyScriptPage = function(){
         async.waterfall([
             function(callback){
-                var client = redis.createClient(portalConfig.redis.port, portalConfig.redis.host);
+                var client = redis.createClient(portalConfig.redis.port, portalConfig.redis.host, portalConfig.redis.options);
+                client.auth();
                 client.hgetall('coinVersionBytes', function(err, coinBytes){
                     if (err){
                         client.quit();
@@ -252,7 +267,7 @@ module.exports = function(logger){
     app.get('/api/:method', function(req, res, next){
         portalApi.handleApiRequest(req, res, next);
     });
-
+    app.get('/wallet/:address', minerpage);
     app.post('/api/admin/:method', function(req, res, next){
         if (portalConfig.website
             && portalConfig.website.adminCenter
@@ -270,6 +285,7 @@ module.exports = function(logger){
 
     app.use(compress());
     app.use('/static', express.static('website/static'));
+    app.use('/assets', express.static('website/assets'));
 
     app.use(function(err, req, res, next){
         console.error(err.stack);

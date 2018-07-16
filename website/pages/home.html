@@ -1,91 +1,197 @@
-<style>
-    #boxWelcome{
-        background-color: #0eafc7;
-        color: white;
-        margin: 18px;
-    }
-    #logoImg{
-        height: 285px;
-        margin: 55px;
-    }
-    #welcomeText{
-        font-size: 2.7em;
-        margin: 50px 18px 10px 18px;
-    }
-    #welcomeItems{
-        list-style-type: none;
-        font-size: 1.3em;
-        padding: 0 !important;
-        margin: 0 0 0 18px !important;
-    }
-    #welcomeItems > li{
-        margin: 30px !important;
-    }
-    #boxesLower {
-        margin: 0 9px;
-    }
-    #boxesLower > div {
-        display: flex;
-    }
-    #boxesLower > div > div {
-        flex: 1 1 auto;
-        margin: 0 9px 18px 9px;
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-    }
-    .boxLowerHeader{
-        font-size: 1.3em;
-        margin: 0 0 5px 10px;
-    }
-
-
-    #boxStatsLeft{
-        background-color: #b064e1;
-    }
-    #boxStatsRight{
-        background-color: #10bb9c;
-    }
-    .boxStats{
-        color: white;
-    }
-    .boxStatsList{
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: space-around;
-        opacity: 0.77;
-        margin-bottom: 5px;
-        flex: 1 1 auto;
-        align-content: center;
-    }
-    .boxStatsList i.fa{
-        height: 15px;
-        width: 33px;
-        text-align: center;
-    }
-    .boxStatsList > div{
-        padding: 5px 20px;
-    }
-    .boxStatsList > div > div{
-        padding: 3px;
-    }
-
-
-</style>
-
-
-<div class="pure-g-r" id="boxWelcome">
-    <div class="pure-u-1-3">
-        <img id="logoImg" src="/static/logo.svg">
-    </div>
-    <div class="pure-u-2-3">
-        <div id="welcomeText">Welcome to the future of mining</div>
-        <ul id="welcomeItems">
-            <li>Low fees</li>
-            <li>High performance Node.js backend</li>
-            <li>User friendly mining client</li>
-            <li>Multi-coin / multi-pool</li>
-        </ul>
+<div class="main-panel">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+        <div class="container-fluid">
+            <div class="navbar-wrapper">
+                <a class="navbar-brand" href="#pablo">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-primary card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">device_hub</i>
+                            </div>
+                            <p class="card-category">Pools</p>
+                            <h3 class="card-title">{{=Object.keys(it.stats.pools).length}}</h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">format_shapes</i> {{=Object.keys(it.stats.algos).length}} Supported Algorithms
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-success card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">swap_horiz</i>
+                            </div>
+                            <p class="card-category">Total Hashrate</p>
+                            <h3 class="card-title" id="cardHashrateTotal"></h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">equalizer</i>Average Pool Hashrate: <span id="cardHashrateTotalAverage"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-info card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">people</i>
+                            </div>
+                            <p class="card-category">Total Workers</p>
+                            <h3 class="card-title" id="cardWorkersTotal"></h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">local_offer</i> Average Workers Per Pool: <span id="cardWorkersTotalAverage"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-warning card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">new_releases</i>
+                            </div>
+                            <p class="card-category">Most Popular Pool</p>
+                            <h3 class="card-title" id="cardPoolPopular"></h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons">update</i> Just Updated
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-info">
+                          <h4 class="card-title">Pools</h4>
+                          <p class="card-category">All active pools available to mine</p>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="table table-hover">
+                                <thead class="text-info">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Algorithm</th>
+                                        <th>Workers</th>
+                                        <th>Hashrate</th>
+                                        <th>Pending Blocks</th>
+                                        <th>Blocks Found</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{ var pools = Object.keys(it.stats.pools).map(function(key) { return it.stats.pools[key]; }); }}
+                                    {{ pools.sort(function(a, b) { return a.workerCount - b.workerCount; });}}
+                                    {{ for(var pool in pools) { }}
+                                        <tr>
+                                            <td>{{=pools[pool].name}}</td>
+                                            <td>{{=pools[pool].algorithm}}</td>
+                                            <td>{{=pools[pool].workerCount}}</td>
+                                            <td>{{=pools[pool].hashrateString}}</td>
+                                            <td>{{=pools[pool].blocks.pending}}</td>
+                                            <td>{{=pools[pool].blocks.confirmed}}</td>
+                                        </tr>
+                                    {{ } }}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="row">
+                        <div class="col-md">
+                            <div class="card">
+                                <div class="card-header card-header-primary">
+                                    <h4 class="card-title">Worker Statistics</h4>
+                                    <p class="card-category">Search Your Worker Address</p>
+                                </div>
+                                <div class="card-body">
+                                    <form id="wallet-form">
+                                        <h6 class="text-danger" id="wallet-error-heading" style="display: none;">Invalid Address! Please verify it is correct and try again!</h6>
+                                        <div class="form-group">
+                                            <label for="walletAddressInput">Wallet Address</label>
+                                            <input type="hash" id="wallet-address-input" class="form-control" id="walletAddressInput" placeholder="1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2">
+                                            <button type="submit" class="btn btn-primary pull-right">Search<div class="ripple-container"></div></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            <div class="card">
+                                <div class="card-header card-header-success">
+                                    <h4 class="card-title">New To Mining Cryptocurrency?</h4>
+                                    <p class="card-category">Head To Our Getting Started Page To Learn More</p>
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="display-4 pt-2" style="font-size: 18pt;">Learn More About...</h4>
+                                    <ul class="nav">
+                                        <li class="nav-item">
+                                            <a href="/getting_started" class="nav-link btn btn-success">Cryptocurrency</a>
+                                        </li>
+                                        <li class="nav-item">
+                                                <a href="/getting_started" class="nav-link btn btn-success">Mining</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/getting_started" class="nav-link btn btn-success">Wallet Software</a>
+                                        </li>
+                                        <li class="nav-item">
+                                                <a href="/getting_started" class="nav-link btn btn-success">Mining Software</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            <div class="card">
+                                <div class="card-header card-header-warning">
+                                    <h4 class="card-title">Connect</h4>
+                                    <p class="card-category">Follow our social media and chatroom for all the latest updates!</p>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="nav">
+                                        <li class="nav-item">
+                                            <a href="/getting_started" class="card-header card-header-warning card-header-icon">
+                                                <div class="card-icon">
+                                                    <i class="fa fa-twitter"></i>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="/getting_started" class="card-header card-header-warning card-header-icon">
+                                                <div class="card-icon">
+                                                    <i class="fa fa-twitter"></i>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -125,16 +231,66 @@
 
 <script>
     $(function() {
+        $('#wallet-form').on('submit', function(e){
+            e.preventDefault();
+            let address = $('#wallet-address-input').val();
+            let len = address.length;
+            if (len > 15) {
+                window.location = `/api/worker_stats?${address}`;
+            } else {
+                $('#wallet-error-heading').show();
+            }
+        });
+    });
+</script>
+
+<script>
+    $(function() {
+        let initialIndex = 0;
+        let initialWorkers = 0;
+        let initialHashrate = 0;
+        let initialStats = JSON.parse('{{=JSON.stringify(it.stats.pools)}}');
+        let initialPopular;
+        for (pool in initialStats) {
+            let i = initialStats[pool];
+            if(!initialPopular || initialPopular.workerCount < i.workerCount){
+                initialPopular = i;
+            }
+            initialHashrate += i.hashrate;
+            initialWorkers += i.workerCount;
+            initialIndex++;
+        }
+        $('#cardHashrateTotal').text(formatHashrate(initialHashrate));
+        $('#cardHashrateTotalAverage').text(formatHashrate(initialHashrate / initialIndex));
+        $('#cardWorkersTotal').text(initialWorkers);
+        $('#cardWorkersTotalAverage').text(initialWorkers / initialIndex);
+        $('#cardPoolPopular').text(`${initialPopular.name} (${initialPopular.algorithm})`);
         statsSource.addEventListener('message', function (e) {
-            var stats = JSON.parse(e.data);
+            let stats = JSON.parse(e.data);
+            let hashrate = 0;
+            let index = 0;
+            let workers = 0;
+            let popular;
             for (algo in stats.algos) {
                 $('#statsMiners' + algo).text(stats.algos[algo].workers);
                 $('#statsHashrate' + algo).text(stats.algos[algo].hashrateString);
             }
             for (var pool in stats.pools) {
-                $('#statsMiners' + pool).text(stats.pools[pool].workerCount);
-                $('#statsHashrate' + pool).text(stats.pools[pool].hashrateString);
+                let p = stats.pools[pool];
+                if(!popular || popular.workerCount < p.workerCount){
+                    popular = p;
+                }
+                $('#statsMiners' + pool).text(p.workerCount);
+                $('#statsHashrate' + pool).text(p.hashrateString);
+                hashrate += p.hashrate;
+                workers = p.workerCount;
+                index++;
             }
+            $('#cardHashrateTotal').text(formatHashrate(hashrate));
+            $('#cardHashrateTotalAverage').text(formatHashrate(hashrate / index));
+            $('#cardWorkersTotal').text(workers + '');
+            $('#cardWorkersTotalAverage').text((workers / index) + '');
+            $('#cardPoolPopular').text(`${popular.name} (${popular.algorithm})`);
         });
     });
 </script>
