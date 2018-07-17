@@ -1,41 +1,17 @@
-<style>
-    #topCharts {
-        padding: 18px;
-    }
-
-    #topCharts>div>div>svg {
-        display: block;
-        height: 280px;
-    }
-
-    .chartWrapper {
-        border: solid 1px #c7c7c7;
-        border-radius: 5px;
-        padding: 5px;
-        margin-bottom: 18px;
-    }
-
-    .chartLabel {
-        font-size: 1.2em;
-        text-align: center;
-        padding: 4px;
-    }
-
-    .chartHolder {}
-</style>
-
-<div class="main-panel">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
-        <div class="container-fluid">
-            <div class="navbar-wrapper">
-                <span class="navbar-brand">Global Pool Statistics</span>
-            </div>
+<!-- Start Content -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row pb-5">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+                <div class="container-fluid">
+                    <div class="navbar-wrapper">
+                        <span class="navbar-brand">Global Pool Statistics</span>
+                    </div>
+                </div>
+            </nav>
+            <!-- End Navbar -->
         </div>
-    </nav>
-    <!-- End Navbar -->
-    <!-- Start Content -->
-    <div class="content">
         <div class="row">
             <div class="col-md">
                 <div class="row">
@@ -82,7 +58,9 @@
                                 b) { return a.workerCount - b.workerCount; }); }} {{ pools = pools.splice(0, 5); }} {{ for(var
                                 pool in pools) { }}
                                 <tr>
-                                    <td><a href="/stats/{{=pools[pool].name}}">{{=pools[pool].name}}</a></td>
+                                    <td>
+                                        <a href="/stats/{{=pools[pool].name}}">{{=pools[pool].name}}</a>
+                                    </td>
                                     <td>{{=pools[pool].algorithm}}</td>
                                     <td>{{=pools[pool].workerCount}}</td>
                                     <td>{{=pools[pool].hashrateString}}</td>
@@ -138,7 +116,7 @@
                                 </tr>
                             </thead>
                             <tbody id="table-worker-body">
-                               
+
                             </tbody>
                         </table>
                     </div>

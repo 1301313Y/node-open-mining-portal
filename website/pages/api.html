@@ -1,10 +1,45 @@
-<div>
-    API Docs here
-
-<ul>
-<li>/stats - raw json statistic</li>
-<li>/pool_stats - historical time per pool json </li>
-<li>/live_stats - live stats </li>
-
-</ul>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg">
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <h4 class="card-title">API Documentation</h4>
+                        <p class="card-category">To pass paramters, use the following format: <span class="font-weight-bold">&lt;website_link&gt;/api/&lt;command&gt;?&lt;parameter&gt;</span></p>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-info">
+                                <tr><th>Link</th>
+                                <th>Description</th>
+                                <th>Parameters</th>
+                                </tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td><a href="api/stats">api/stats</a></td>
+                                    <td>Retrieves raw JSON statistics.</td>
+                                    <td>[]</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="api/pool_stats">api/pool_stats</a></td>
+                                    <td>Retrieves historical pool JSON statistics.</td>
+                                    <td>[pool_name <span class="text-success">(Optional)</span>]</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="api/worker_stats?">api/worker_stats</a></td>
+                                    <td>Retrieves historical worker JSON statistics.</td>
+                                    <td>[wallet_address <span class="text-danger">(Required)</span>]</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="api/live_stats">api/live_stats</a></td>
+                                    <td>Live streams raw JSON statistics.</td>
+                                    <td>[]</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
