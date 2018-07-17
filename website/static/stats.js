@@ -1,3 +1,6 @@
+var skipCap = 5; // 5 mins as data is collected every 60 seconds
+var skipIndex = 5; //include first entry
+
 var poolWorkerData;
 var poolHashrateData;
 var poolBlockData;
@@ -42,6 +45,11 @@ function buildChartData(){
         var time = statData[i].time * 1000;
         poolTimeData.push(time);
         for (var f = 0; f < poolKeys.length; f++){
+            if(skipIndex < skipCap){
+                skipIndex++;
+                continue;
+            }
+            skipIndex = 0;
             var pName = poolKeys[f];
             var a = pools[pName] = (pools[pName] || {
                 hashrate: [],
@@ -49,7 +57,7 @@ function buildChartData(){
                 blocks: []
             });
             if (pName in statData[i].pools){
-                a.hashrate.push({ x: time, y: statData[i].pools[pName].hashrate });
+                a.hashrate.push({ x: time, y: statData[i].pools[pName].hashrate, original: statData[i].pools[pName].hashrate, ema: 0 });
                 a.workers.push({ x: time, y: statData[i].pools[pName].workerCount });
                 a.blocks.push({ x: time, y: statData[i].pools[pName].blocks.pending });
                 handleMaxUser(statData[i].pools[pName].workerCount);
@@ -86,11 +94,12 @@ function buildChartData(){
         let hashrate = pools[pool].hashrate;
         hashDistData.labels.push(pool);
         hashDistData.data.push(hashrate[hashrate.length - 1].y); // get last hashrate entry
+        applyExponentialMovingAVG(hashrate, 24);
         poolHashrateData.push({
             label: pool,
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: pools[pool].hashrate
+            pointRadius: 0,
+            borderColor: color,
+            data: hashrate
         });
         poolBlockData.push({
             label: pool,
@@ -137,7 +146,7 @@ function displayWorkerChart(){
                 yAxes: [{
                     beginAtZero: true,
                     gridLines: {
-                        color: "rgba(255, 255, 255, 0.1)"
+                        color: "rgba(100, 100, 100, 0.1)"
                     },
                     ticks: {
                         beginAtZero: true,
@@ -154,6 +163,67 @@ function displayWorkerChart(){
                     },
                     ticks: {
                         source: 'labels'
+                    }
+                }]
+            }
+        }
+    });
+    // use configuration item and data specified to show chart
+    //poolWorkerChart = new Chartist.Bar('#worker-chart-global', dataCompletedTasksChart, optionsCompletedTasksChart);
+    //md.startAnimationForBarChart(poolWorkerChart);
+}
+
+function displayHashrateChart(){
+    var ctx = $('#hashrate-chart-global');
+    poolHashrateChart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+        data: {
+            datasets: poolHashrateData.map((i) => {
+                return { 
+                    label: i.label,
+                    data: i.data.map((e) => { return { x: e.x, y: e.ema }; }),
+                    pointRadius: i.pointRadius,
+                    borderColor: i.borderColor,
+                    backgroundColor: i.backgroundColor,
+                }; 
+            })
+        },
+        // Configuration options go here
+        options: {
+            tooltips: {
+                callbacks: {
+                    title: function(tooltipItem, data) {
+                        return Date(tooltipItem).toLocaleString();
+                    },
+                    label: function(tooltipItem, data) {
+                        return formatHashrate(tooltipItem.yLabel);
+                    }
+                }
+            },
+            scales: {
+                yAxes: [{
+                    beginAtZero: true,
+                    gridLines: {
+                        color: "rgba(100, 100, 100, 0.1)"
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        steps: 10,
+                        stepValue: 5,
+                        callback: function(value, index, values) {
+                            return formatHashrate(value);
+                        }
+                    },
+                }],
+                xAxes: [{
+                    type: 'time',
+                    distribution: 'series',
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: {
+                        source: 'data'
                     }
                 }]
             }
@@ -228,7 +298,7 @@ function displayHashDistChart(){
 function triggerChartUpdates(){
     poolWorkerChart.update();
     hashDistChart.update();
-    //poolHashrateChart.update();
+    poolHashrateChart.update();
     //poolBlockChart.update();
 }
 
@@ -240,6 +310,7 @@ $.getJSON('/api/pool_stats', function(data){
     displayWorkerChart();
     displayWorkDistChart();
     displayHashDistChart();
+    displayHashrateChart();
 });
 
 statsSource.addEventListener('message', function(e){
@@ -260,6 +331,11 @@ statsSource.addEventListener('message', function(e){
         displayWorkerChart();
     }
     else {
+        if(skipIndex < skipCap){
+            skipIndex++;
+            return;
+        }
+        skipIndex = 0;
         var time = stats.time * 1000;
         for (var f = 0; f < poolKeys.length; f++) {
             var pool =  poolKeys[f];

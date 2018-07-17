@@ -100,7 +100,7 @@
                                     {{ pools.sort(function(a, b) { return a.workerCount - b.workerCount; });}}
                                     {{ for(var pool in pools) { }}
                                         <tr>
-                                            <td>{{=pools[pool].name}}</td>
+                                            <td><a href="/stats/{{=pools[pool].name}}">{{=pools[pool].name}}</a></td>
                                             <td>{{=pools[pool].algorithm}}</td>
                                             <td>{{=pools[pool].workerCount}}</td>
                                             <td>{{=pools[pool].hashrateString}}</td>
@@ -130,62 +130,7 @@
                                             <button type="submit" class="btn btn-primary pull-right">Search<div class="ripple-container"></div></button>
                                         </div>
                                     </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md">
-                            <div class="card">
-                                <div class="card-header card-header-success">
-                                    <h4 class="card-title">New To Mining Cryptocurrency?</h4>
-                                    <p class="card-category">Head To Our Getting Started Page To Learn More</p>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="display-4 pt-2" style="font-size: 18pt;">Learn More About...</h4>
-                                    <ul class="nav">
-                                        <li class="nav-item">
-                                            <a href="/getting_started" class="nav-link btn btn-success">Cryptocurrency</a>
-                                        </li>
-                                        <li class="nav-item">
-                                                <a href="/getting_started" class="nav-link btn btn-success">Mining</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="/getting_started" class="nav-link btn btn-success">Wallet Software</a>
-                                        </li>
-                                        <li class="nav-item">
-                                                <a href="/getting_started" class="nav-link btn btn-success">Mining Software</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md">
-                            <div class="card">
-                                <div class="card-header card-header-warning">
-                                    <h4 class="card-title">Connect</h4>
-                                    <p class="card-category">Follow our social media and chatroom for all the latest updates!</p>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="nav">
-                                        <li class="nav-item">
-                                            <a href="/getting_started" class="card-header card-header-warning card-header-icon">
-                                                <div class="card-icon">
-                                                    <i class="fa fa-twitter"></i>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="/getting_started" class="card-header card-header-warning card-header-icon">
-                                                <div class="card-icon">
-                                                    <i class="fa fa-twitter"></i>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                               </div>
                             </div>
                         </div>
                     </div>

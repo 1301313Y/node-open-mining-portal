@@ -3,4 +3,6 @@ node_modules/
 config.json
 pool_configs/*.json
 !pool_configs/litecoin_example.json
-logs/
+website/static/semantic/
+website/static/chartist-plugin-legend.js
+website/static/echarts.*

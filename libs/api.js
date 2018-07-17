@@ -20,7 +20,32 @@ module.exports = function(logger, portalConfig, poolConfigs){
                 return;
             case 'pool_stats':
                 res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(portalStats.statPoolHistory));
+                if (req.url.indexOf("?") > 0) {
+                    var url_parms = req.url.split("?");
+                    if (url_parms.length > 0) {
+                        var pool = url_parms[1] || null;
+                        if(pool) {
+                            res.end(JSON.stringify(
+                                {
+                                    stats: portalStats.stats.pools[pool],
+                                    history: portalStats.statPoolHistory.map((i) => {
+                                        return {
+                                            time: i.time,
+                                            data: i.pools[pool]
+                                        };
+                                    })
+                                }
+                            ));
+                            return;
+                        } else {
+                            res.end(JSON.stringify({result: "Error", message: "Pool name could not be read!"}));
+                        }
+                    } else {
+                        res.end(JSON.stringify({result: "Error", message: "Must include pool name!"}));
+                    }
+                } else {
+                    res.end(JSON.stringify(portalStats.statPoolHistory));
+                }
                 return;
             case 'worker_stats':
 				res.header('Content-Type', 'application/json');
@@ -29,22 +54,22 @@ module.exports = function(logger, portalConfig, poolConfigs){
                     if (url_parms.length > 0) {
                         var history = {};
                         var workers = {};
-                        var address = url_parms[1] || null;
+                        var pool = url_parms[1] || null;
                         //res.end(portalStats.getWorkerStats(address));
-                        if (address != null && address.length > 0) {
+                        if (pool != null && pool.length > 0) {
                             // make sure it is just the miners address
-                            address = address.split(".")[0];
+                            pool = pool.split(".")[0];
                             // get miners balance along with worker balances
-                            portalStats.getBalanceByAddress(address, function(balances) {
+                            portalStats.getBalanceByAddress(pool, function(balances) {
                                 // get current round share total
-                                portalStats.getTotalSharesByAddress(address, function(shares) {
+                                portalStats.getTotalSharesByAddress(pool, function(shares) {
                                     var totalHash = parseFloat(0.0);
                                     var totalShares = shares;
                                     var networkHps = 0;
                                     for (var h in portalStats.statHistory) {
                                         for(var pool in portalStats.statHistory[h].pools) {
                                             for(var w in portalStats.statHistory[h].pools[pool].workers){
-                                                if (w.startsWith(address)) {
+                                                if (w.toLowerCase().charAt(0) === pool.toLowerCase().charAt(0)) {
                                                     if (history[w] == null) {
                                                         history[w] = [];
                                                     }
@@ -59,7 +84,7 @@ module.exports = function(logger, portalConfig, poolConfigs){
                                     }
                                     for(var pool in portalStats.stats.pools) {
                                         for(var w in portalStats.stats.pools[pool].workers){
-                                            if (w.startsWith(address)) {
+                                            if (w.toLowerCase().charAt(0) === pool.toLowerCase().charAt(0)) {
                                                 workers[w] = portalStats.stats.pools[pool].workers[w];
                                                 for (var b in balances.balances) {
                                                     if (w == balances.balances[b].worker) {
@@ -74,7 +99,7 @@ module.exports = function(logger, portalConfig, poolConfigs){
                                             }
                                         }
                                     }
-                                    res.end(JSON.stringify({miner: address, totalHash: totalHash, totalShares: totalShares, networkHps: networkHps, immature: balances.totalImmature, balance: balances.totalHeld, paid: balances.totalPaid, workers: workers, history: history}));
+                                    res.end(JSON.stringify({miner: pool, totalHash: totalHash, totalShares: totalShares, networkHps: networkHps, immature: balances.totalImmature, balance: balances.totalHeld, paid: balances.totalPaid, workers: workers, history: history}));
                                 });
                             });
                         } else {

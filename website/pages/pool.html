@@ -1,0 +1,123 @@
+<div class="main-panel">
+    <!-- Start Content -->
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-3">
+                <div class="card">
+                    <div class="card-header card-header-mono card-header-icon">
+                        <div class="card-icon">
+                            <img src="../assets/img/coins/coin_{{=it.stats.pool}}.png" width="40px" />
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title font-weight-bold">{{=it.stats.pool }}</h4>
+                        {{? it.stats.pools[it.stats.pool]}} {{ var pool = it.stats.pools[it.stats.pool]; }}
+                        <h5 class="card-title" style="font-size: 12pt;">Details</h5>
+                        <ul>
+                            <li>Algorithm: {{=pool.algorithm}}</li>
+                            <li>Ticker: {{=pool.symbol}}</li>
+                            <li id="list-block-height">Block Height: {{=pool.poolStats.networkBlocks}}</li>
+                            <li id="list-net-hash">Network Hashrate: {{=pool.poolStats.networkHpsString}}</li>
+                            <li id="list-net-diff">Network Difficulty: {{=pool.poolStats.networkDiff}}</li>
+                            {{ var netVersion = pool.poolStats.networkVersion; }}
+                            <li>Pool Daemon Version: {{=netVersion.substring(1, netVersion.length - 1)}}</li>
+                            <li>Pool Daemon Protocol: {{=pool.poolStats.networkProtocolVersion}}</li>
+                        </ul>
+                        <h5 class="card-title" style="font-size: 12pt;">Links</h5>
+                        <ul>
+                            <li>Website: </li>
+                            <li>Explorer: </li>
+                            <li>Social Media: </li>
+                        </ul>
+                        {{??}}
+                        <p class="card-text text-danger">Error getting data!</p>
+                        {{?}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-8 col-sm-9">
+                <div class="card bg-success">
+                    <div class="card-header card-chart card-header-mono">
+                        <canvas id="pool-chart-workers" height="105"></canvas>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title text-light">Workers</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg">
+                <div class="card bg-info">
+                    <div class="card-header card-chart card-header-mono">
+                        <canvas id="pool-chart-hashrate" height="100"></canvas>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title text-light">Hashrate
+                            <span style="font-size: 10pt;">(Averaged over 5 minute periods)</span>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">Recent Blocks</h4>
+                        <p class="card-category">Check individual pool or wallet stat pages for specific details</p>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-primary">
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Height</th>
+                                    <th>Recipetents</th>
+                                    <th>Confirmations</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pool-table-block-body">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-header card-header-info">
+                        <h4 class="card-title">Recent Payouts</h4>
+                        <p class="card-category">Check individual pool or wallet stat pages for specific details</p>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-info">
+                                <tr>
+                                    <th>Amount</th>
+                                    <th>Recipetents</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pool-table-payout-body">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../static/moment-with-locales.js"></script>
+<script src="../static/sma.js"></script>
+<script src="../static/ema.js"></script>
+<script src="../static/random-color.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script>
+    var _pool = '{{=String(it.stats.pool)}}';
+    window.statsSource = new EventSource("/api/live_stats");
+    document.querySelector('main').appendChild(document.createElement('script')).src = '/static/pool_stats.js';
+</script>

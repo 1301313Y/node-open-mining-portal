@@ -1,0 +1,5 @@
+{   
+    "script": "init.js",
+    "ignore": ["logs/*"],
+    "ext": "js,html,json" 
+}

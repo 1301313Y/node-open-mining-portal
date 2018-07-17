@@ -1,4 +1,4 @@
-var applyExponentialMovingAVG= function(dataObjArray, timePeriods){
+var applyExponentialMovingAVG= function(dataObjArray, timePeriods = 12){
     var k = 2/(timePeriods + 1);
     // first item is just the same as the first item in the input
     dataObjArray[0].ema = dataObjArray[0].original;
