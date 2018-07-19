@@ -7,3 +7,4 @@ pool_configs/*.json
 website/static/semantic/
 website/static/chartist-plugin-legend.js
 website/static/echarts.*
+.vscode/

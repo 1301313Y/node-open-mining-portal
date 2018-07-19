@@ -11,7 +11,8 @@
                     </div>
                     <div class="card-body">
                         <h4 class="card-title font-weight-bold">{{=it.stats.pool }}</h4>
-                        {{? it.stats.pools[it.stats.pool]}} {{ var pool = it.stats.pools[it.stats.pool]; }}
+                        {{? it.stats.pools[it.stats.pool]}} 
+                        {{ var pool = it.stats.pools[it.stats.pool]; }}
                         <h5 class="card-title" style="font-size: 12pt;">Details</h5>
                         <ul>
                             <li>Algorithm: {{=pool.algorithm}}</li>
@@ -19,15 +20,9 @@
                             <li id="list-block-height">Block Height: {{=pool.poolStats.networkBlocks}}</li>
                             <li id="list-net-hash">Network Hashrate: {{=pool.poolStats.networkHpsString}}</li>
                             <li id="list-net-diff">Network Difficulty: {{=pool.poolStats.networkDiff}}</li>
-                            {{ var netVersion = pool.poolStats.networkVersion; }}
+                            {{ var netVersion = pool.poolStats.networkVersion || 0; }}
                             <li>Pool Daemon Version: {{=netVersion.substring(1, netVersion.length - 1)}}</li>
                             <li>Pool Daemon Protocol: {{=pool.poolStats.networkProtocolVersion}}</li>
-                        </ul>
-                        <h5 class="card-title" style="font-size: 12pt;">Links</h5>
-                        <ul>
-                            <li>Website: </li>
-                            <li>Explorer: </li>
-                            <li>Social Media: </li>
                         </ul>
                         {{??}}
                         <p class="card-text text-danger">Error getting data!</p>
@@ -110,14 +105,9 @@
     </div>
 </div>
 
-
-<script src="../static/moment-with-locales.js"></script>
-<script src="../static/sma.js"></script>
-<script src="../static/ema.js"></script>
-<script src="../static/random-color.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="../static/Chart.bundle.min.js"></script>
 <script>
     var _pool = '{{=String(it.stats.pool)}}';
     window.statsSource = new EventSource("/api/live_stats");
-    document.querySelector('main').appendChild(document.createElement('script')).src = '/static/pool_stats.js';
+    document.querySelector('main').appendChild(document.createElement('script')).src = '/static/stats-pool.min.js';
 </script>

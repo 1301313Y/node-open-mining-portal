@@ -1,80 +1,80 @@
-<div class="main-panel">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
-        <div class="container-fluid">
-            <div class="navbar-wrapper">
-                <span class="navbar-brand">Statistics For Wallet {{=String(it.stats.address).split(".")[0]}}</span>
-            </div>
+<!-- Start Content -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row pb-5">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+                <div class="container-fluid">
+                    <div class="navbar-wrapper">
+                        <span class="navbar-brand">Statistics For Wallet {{=String(it.stats.address).split(".")[0]}}</span>
+                    </div>
+                </div>
+            </nav>
         </div>
-    </nav>
-    <!-- End Navbar -->
-    <!-- Start Content -->
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                        <div class="card-header card-header-primary card-header-icon">
-                            <div class="card-icon">
-                                <i class="material-icons">people</i>
-                            </div>
-                            <p class="card-category">Workers</p>
-                            <h3 class="card-title" id="workers-active-total"></h3>
+        <!-- End Navbar -->
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <div class="card-header card-header-primary card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">people</i>
                         </div>
-                        <div class="card-footer">
-                            <div class="stats">
-                                <i class="material-icons">info</i> Non-named workers will be merged.
-                            </div>
+                        <p class="card-category">Workers</p>
+                        <h3 class="card-title" id="workers-active-total"></h3>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <i class="material-icons">info</i> Non-named workers will be merged.
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                        <div class="card-header card-header-success card-header-icon">
-                            <div class="card-icon">
-                                <i class="material-icons">swap_horiz</i>
-                            </div>
-                            <p class="card-category">Total Hashrate:
-                                <h3 class="card-title" id="hashrate-wallet-total"></h3>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <div class="card-header card-header-success card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">swap_horiz</i>
                         </div>
-                        <div class="card-footer">
-                            <div class="stats">
-                                <i class="material-icons">equalizer</i>Average Worker Hashrate:
-                                <span id="hashrate-wallet-worker-average"></span>
-                            </div>
+                        <p class="card-category">Total Hashrate:
+                            <h3 class="card-title" id="hashrate-wallet-total"></h3>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <i class="material-icons">equalizer</i>Average Worker Hashrate:
+                            <span id="hashrate-wallet-worker-average"></span>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                        <div class="card-header card-header-info card-header-icon">
-                            <div class="card-icon">
-                                <i class="material-icons">attach_money</i>
-                            </div>
-                            <p class="card-category">Total Paid</p>
-                            <h3 class="card-title" id="payout-paid-total"></h3>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <div class="card-header card-header-info card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">attach_money</i>
                         </div>
-                        <div class="card-footer">
-                            <div class="stats">
-                                <i class="material-icons">schedule</i> Pending Payouts:
-                                <span id="payout-balance-total"></span>
-                            </div>
+                        <p class="card-category">Total Paid</p>
+                        <h3 class="card-title" id="payout-paid-total"></h3>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <i class="material-icons">schedule</i> Pending Payouts:
+                            <span id="payout-balance-total"></span>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                        <div class="card-header card-header-warning card-header-icon">
-                            <div class="card-icon">
-                                <i class="material-icons">playlist_play</i>
-                            </div>
-                            <p class="card-category">Total Shares This Round</p>
-                            <h3 class="card-title" id="shares-wallet-total"></h3>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <div class="card-header card-header-warning card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">playlist_play</i>
                         </div>
-                        <div class="card-footer">
-                            <div class="stats">
-                                <i class="material-icons">info</i> Shares Are Rounded For Display
-                            </div>
+                        <p class="card-category">Total Shares This Round</p>
+                        <h3 class="card-title" id="shares-wallet-total"></h3>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <i class="material-icons">info</i> Shares Are Rounded For Display
                         </div>
                     </div>
                 </div>
@@ -87,7 +87,9 @@
                         <canvas class="ct-chart" id="myChart" height="100"></canvas>
                     </div>
                     <div class="card-body text-light">
-                        <h4 class="card-title">Worker Statistics <span style="font-size: 10pt">(Averaged Over 5 Minute Periods)</span></h4>
+                        <h4 class="card-title">Worker Statistics
+                            <span style="font-size: 10pt">(Averaged Over 5 Minute Periods)</span>
+                        </h4>
                     </div>
                 </div>
             </div>
@@ -119,16 +121,17 @@
                 </div>
             </div>
         </div>
-        <!-- End Content -->
     </div>
-    <script src="../static/moment-with-locales.js"></script>
-    <script src="../static/sma.js"></script>
-    <script src="../static/ema.js"></script>
-    <script src="../static/random-color.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-    <script>
-        var _miner = '{{=String(it.stats.address).split(".")[0]}}';
-        var _workerCount = 0;
-        window.statsSource = new EventSource("/api/live_stats");
-        document.querySelector('main').appendChild(document.createElement('script')).src = '/static/wallet_stats.js';
-    </script>
+    <!-- End Content -->
+</div>
+<script src="../static/moment-with-locales.js"></script>
+<script src="../static/sma.js"></script>
+<script src="../static/ema.js"></script>
+<script src="../static/random-color.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script>
+    var _miner = '{{=String(it.stats.address).split(".")[0]}}';
+    var _workerCount = 0;
+    window.statsSource = new EventSource("/api/live_stats");
+    document.querySelector('main').appendChild(document.createElement('script')).src = '/static/wallet_stats.js';
+</script>

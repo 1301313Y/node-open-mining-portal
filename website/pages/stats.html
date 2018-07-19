@@ -18,7 +18,7 @@
                     <div class="col-md">
                         <div class="card bg-primary">
                             <div class="card-header card-chart card-header-mono">
-                                <canvas id="pool-chart-global" height="256"></canvas>
+                                <canvas id="dist-worker-chart-global" height="256"></canvas>
                             </div>
                             <div class="card-body">
                                 <h4 class="card-title text-light">Pool Worker Distribution</h4>
@@ -54,18 +54,7 @@
                                 </tr>
                             </thead>
                             <tbody id="table-worker-body">
-                                {{ var pools = Object.keys(it.stats.pools).map(function(key) { return it.stats.pools[key]; }); }} {{ pools.sort(function(a,
-                                b) { return a.workerCount - b.workerCount; }); }} {{ pools = pools.splice(0, 5); }} {{ for(var
-                                pool in pools) { }}
-                                <tr>
-                                    <td>
-                                        <a href="/stats/{{=pools[pool].name}}">{{=pools[pool].name}}</a>
-                                    </td>
-                                    <td>{{=pools[pool].algorithm}}</td>
-                                    <td>{{=pools[pool].workerCount}}</td>
-                                    <td>{{=pools[pool].hashrateString}}</td>
-                                </tr>
-                                {{ } }}
+                                
                             </tbody>
                         </table>
                     </div>
@@ -98,40 +87,48 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg">
-                <div class="card">
-                    <div class="card-header card-header-warning">
-                        <h4 class="card-title">Recent Payouts</h4>
-                        <p class="card-category">Check individual pool or wallet stat pages for specific details</p>
-                    </div>
-                    <div class="card-body table-responsive">
-                        <table class="table table-hover">
-                            <thead class="text-warning">
-                                <tr>
-                                    <th>Coin</th>
-                                    <th>Amount</th>
-                                    <th>Recipetents</th>
-                                    <th>Time</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-worker-body">
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 
-
-<script src="../static/moment-with-locales.js"></script>
-<script src="../static/sma.js"></script>
-<script src="../static/ema.js"></script>
-<script src="../static/random-color.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <script>
-    document.querySelector('main').appendChild(document.createElement('script')).src = '/static/stats.js';
+    $(window).on('load', function() {
+        //setup the table content initally
+        $('#table-worker-body').html(`
+            {{ var pools = Object.keys(it.stats.pools).map(function(key) { return it.stats.pools[key]; }); }}
+            {{ pools.sort(function(a, b) { return a.workerCount - b.workerCount; }); }}
+            {{ pools = pools.splice(0, 5); }} 
+            {{ for(var pool in pools) { }}
+            <tr>
+                <td>
+                    <a href="/stats/{{=pools[pool].name}}">{{=pools[pool].name}}</a>
+                </td>
+                <td>{{=pools[pool].algorithm}}</td>
+                <td>{{=pools[pool].workerCount}}</td>
+                <td>{{=pools[pool].hashrateString}}</td>
+            </tr>
+            {{ } }}
+        `);
+        //updat table every 5 mins
+        setInterval(() => {
+            $('#table-worker-body').html(`
+                {{ var pools = Object.keys(it.stats.pools).map(function(key) { return it.stats.pools[key]; }); }}
+                {{ pools.sort(function(a, b) { return a.workerCount - b.workerCount; }); }}
+                {{ pools = pools.splice(0, 5); }} 
+                {{ for(var pool in pools) { }}
+                <tr>
+                    <td>
+                        <a href="/stats/{{=pools[pool].name}}">{{=pools[pool].name}}</a>
+                    </td>
+                    <td>{{=pools[pool].algorithm}}</td>
+                    <td>{{=pools[pool].workerCount}}</td>
+                    <td>{{=pools[pool].hashrateString}}</td>
+                </tr>
+                {{ } }}
+            `);
+        }, 1000 * 60 * 5);
+    });
+</script>
+<script src="../static/Chart.bundle.min.js"></script>
+<script>
+    document.querySelector('main').appendChild(document.createElement('script')).src = '/static/stats-global.min.js';
 </script>
